@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class ZoomController < ApplicationController
-  def index
-    render json: { status: 'ok' }
-  end
-
   def auth
     access_token = fetch_access_token
     headers = { 'Authorization' => "Bearer #{access_token}" }
