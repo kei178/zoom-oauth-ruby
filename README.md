@@ -1,24 +1,29 @@
-# README
+# Zoom Oauth App Ruby Example
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This is a Zoom OAuth App demo with Ruby on Rails.
 
-Things you may want to cover:
+## Version
 
-* Ruby version
+- Ruby 2.5.7
+- Rails 5.2.6
 
-* System dependencies
+## Zoom documentation
 
-* Configuration
+1. [OAuth with Zoom](https://marketplace.zoom.us/docs/guides/authorization/oauth/oauth-with-zoom) 
+2. [Create an OAuth App](https://marketplace.zoom.us/docs/guides/getting-started/app-types/create-oauth-app) 
 
-* Database creation
+## Setup dotenv
 
-* Database initialization
+Create a .env file.
 
-* How to run the test suite
+```
+touch .env
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Copy the following into this file, which we'll add your own values to:
 
-* Deployment instructions
-
-* ...
+```
+ZOOM_CLIENT_ID=
+ZOOM_CLIENT_SECRET=
+ZOOM_REDIRECT_URL=
+```
