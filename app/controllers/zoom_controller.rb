@@ -1,28 +1,19 @@
 # frozen_string_literal: true
 
 class ZoomController < ApplicationController
+  def index; end
+
   def auth
-    access_token = fetch_access_token
-    headers = { 'Authorization' => "Bearer #{access_token}" }
-    response = HTTParty.get('https://api.zoom.us/v2/users/me', headers: headers)
-    render json: { current_user: response.parsed_response }
+    auth = fetch_zoom_auth
+    access_token = auth['access_token']
+    zoom_client = Zoom::Client::OAuth.new(access_token: access_token, timeout: 15)
+    user = zoom_client.user_get(id: 'me')
+    render json: { auth: auth, user: user }
   end
 
   private
 
-  # https://marketplace.zoom.us/docs/guides/auth/oauth#getting-access-token
-  def fetch_access_token
-    url = 'https://zoom.us/oauth/token?grant_type=authorization_code&' +
-          "code=#{params[:code]}&" + "redirect_uri=#{ENV['ZOOM_REDIRECT_URL']}"
-    headers = {
-      'Authorization' => "Basic #{encoded_client_credentials}",
-      'Content-Type' => 'application/x-www-form-urlencoded'
-    }
-    response = HTTParty.post(url, headers: headers)
-    response.parsed_response['access_token']
-  end
-
-  def encoded_client_credentials
-    Base64.strict_encode64("#{ENV['ZOOM_CLIENT_ID']}:#{ENV['ZOOM_CLIENT_SECRET']}")
+  def fetch_zoom_auth
+    Zoom::Client::OAuth.new(auth_code: params[:code], redirect_uri: ENV['ZOOM_REDIRECT_URL'], timeout: 15).auth
   end
 end
